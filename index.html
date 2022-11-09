@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    .container-fluid {
+        background-color: #78ac68;
+    }
+    .nav-item  {
+        background-color: #ffffff;
+    }
+    
+    .container {
+        background-color: #043430;
+    }
+    .text-center {
+        color: #ffffff;
+    }
+    .body {
+        background-color: #043430;
+    }
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web GIS 190425</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="body">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+               
+              </li>
+              <li class="nav-item">
+                
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <b style="font-size: 25px;">Division</b>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" id="fulLocal" href="#">Full Extent</a></li>
+                  <li><a class="dropdown-item" id="khulnaLocal" href="#">Khulna</a></li>
+                  <li><a class="dropdown-item" id="dhakaLocal" href="#">Dhaka</a></li>
+                  <li><a class="dropdown-item" id="chattogramLocal" href="#">Chattogram</a></li>
+                  <li><a class="dropdown-item" id="mymLocal" href="#">Mymensingh</a></li>
+                  <li><a class="dropdown-item" id="rajLocal" href="#">Rajshahi</a></li>
+                  <li><a class="dropdown-item" id="rangLocal" href="#">Rangpur</a></li>
+                  <li><a class="dropdown-item" id="sylLocal" href="#">Sylhet</a></li>
+                  <li><a class="dropdown-item" id="barisalLocal" href="#">Barisal</a>
+                  </li>
+                </ul>
+              </li>
+             
+        
+              
+            </ul>
+            <form class="d-flex">
+             
+              
+            </form>
+          </div>
+        </div>
+      </nav>
+    <div class="container">
+        <h1 class="text-center",style="color:white"><b>Map of Bangladesh</b></h1>
+        <p style="font-size:27px;font-family:Arial, Helvetica, sans-serif;color: beige;"><marquee><b> This is an interactive web Map. Select any division name from the 'Division' button on the upper left corner.</b></marquee></p>
+        <div class="form-check form-switch">
+            <p style="color:white;font-size:28px">Turn on District Layer</p>
+            <input class="form-check-input" type="checkbox" role="switch" name="d_layer" id="d_layer">
+            <label style="color: white;font-size:18px;" class="form-check-label" for="d_layer">District Layer</label>
+            
+        </div>
+        
+        <p style="font-size:15 px;"><center><b><i style="color:white;">Prepared By: Student ID- 190425</i></b></center></p>
+        <div class="row">
+            
+            <div class="col">
+                <div id="map" class="map" style="height: 600px; width: 100%"></div>
+            </div>
+            
+        </div>
+        
+       
+    </div>
+    <script src="district.geojson"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.1/dist/leaflet.js" integrity="sha256-NDI0K41gVbWqfkkaHj15IzU7PtMoelkzyKp8TOaFQ3s=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        var map = L.map('map').setView([22.82000, 89.550003], 7);
+        var basemap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+        map.addLayer(basemap);
+        var full_marker = L.marker([23.6850, 90.3563]);
+        var khulna_marker = L.marker([22.82000, 89.550003]);
+        var dhaka_marker = L.marker([23.8103, 90.4125]);
+        var ctg_marker = L.marker([22.3569, 91.7832]);
+        var mym_marker = L.marker([24.7471, 90.4203]);
+        var raj_marker = L.marker([24.3745, 88.6042]);
+        var rang_marker = L.marker([25.7439, 89.2752]);
+        var syl_marker = L.marker([24.8949, 91.8687]);
+        var barisal_marker = L.marker([22.7010, 90.3535]); // .addTo(map)
+        
+        var ful_local = document.getElementById("fulLocal");
+        var khulna_local = document.getElementById("khulnaLocal");
+        var dhaka_local = document.getElementById("dhakaLocal");
+        var ctg_local = document.getElementById("chattogramLocal");
+        var barisal_local = document.getElementById("barisalLocal");
+        var mym_local = document.getElementById("mymLocal");
+        var rang_local = document.getElementById("rangLocal");
+        var raj_local = document.getElementById("rajLocal");
+        var syl_local = document.getElementById("sylLocal");
+
+        ful_local.onclick = function(){
+            map.addLayer(full_marker);
+            map.setView([23.6850, 90.3563], 7)
+        }
+        khulna_local.onclick = function(){
+            map.addLayer(khulna_marker);
+            map.setView([22.82000, 89.550003], 12)
+        }
+        
+        dhaka_local.onclick = function(){
+            map.addLayer(dhaka_marker);
+            map.setView([23.8103, 90.4125], 12)
+        }
+
+        barisal_local.onclick = function(){
+            map.addLayer(barisal_marker);
+            map.setView([22.7010, 90.3535], 12)
+        }
+
+        ctg_local.onclick = function(){
+            map.addLayer(ctg_marker);
+            map.setView([22.3569, 91.7832], 12)
+        }
+
+        mym_local.onclick = function(){
+            map.addLayer(mym_marker);
+            map.setView([24.7471, 90.4203], 12)
+        }
+
+        raj_local.onclick = function(){
+            map.addLayer(raj_marker);
+            map.setView([24.3745, 88.6042], 12)
+        }
+
+        rang_local.onclick = function(){
+            map.addLayer(rang_marker);
+            map.setView([25.7439, 89.2752], 12)
+        }
+
+        syl_local.onclick = function(){
+            map.addLayer(syl_marker);
+            map.setView([24.8949, 91.8687], 12)
+        }
+
+        var district_style = {
+          color: "#000",
+          fillColor: "#000",
+          fillOpacity: 0.5
+        }
+
+        // highlight admin feature style
+        var highlightStyle = {
+            color: 'red', 
+            weight: 1.5,
+            fillOpacity: 0.5,
+            fillColor: 'red'
+        };
+
+        var district_layer = L.geoJSON(district, {
+          style: district_style,
+          onEachFeature: function (feature, dLayer){
+            // dLayer.bindPopup(feature.properties.District_N)
+            // dLayer.bindTooltip(feature.properties.District_N)
+            dLayer.on("mouseover", function(e) {
+              this.setStyle(highlightStyle);
+              this.bindTooltip(feature.properties.District_N)
+              this.bindPopup(feature.properties.District_N)
+            });
+            dLayer.on("mouseout", function(e) {
+              this.setStyle(district_style);
+            });
+          }
+        });
+        // map.addLayer(district_layer);
+
+        var districtCB = document.querySelector("#d_layer");
+        districtCB.onclick = function(){
+          if(this.checked){
+            map.addLayer(district_layer);
+          }
+          else{
+              map.removeLayer(district_layer);
+          }
+        }
+
+    </script>
+    <br>
+    <center> <h6 style="color:white">This web map has been produced only for educational purpose.</h6> </center>
+</body>
+</html>
